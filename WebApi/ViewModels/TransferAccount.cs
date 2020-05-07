@@ -8,7 +8,6 @@ namespace WebApi.ViewModels
 {
     public class TransferAccount
     {
-        public string Id { get; set; }
         [Required]
         public uint AccountNumberReceiver { get; set; }
         [Required]

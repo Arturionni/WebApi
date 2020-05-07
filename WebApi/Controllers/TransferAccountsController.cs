@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace WebApi.Controllers
         }
 
         // POST: api/TransferAccounts
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostTransferAccount([FromBody] TransferAccount transferAccount)
         {
@@ -32,8 +34,12 @@ namespace WebApi.Controllers
 
             var current = _context.Accounts.Where(b => b.AccountNumber == transferAccount.AccountNumberCurrent).FirstOrDefault();
             var receiver = _context.Accounts.Where(b => b.AccountNumber == transferAccount.AccountNumberReceiver).FirstOrDefault();
-            current.AccountBalance -= transferAccount.Value;
-            receiver.AccountBalance += transferAccount.Value;
+            if (current == null || receiver == null)
+            {
+                return NotFound();
+            }
+            current.AccountBalance = (float)Math.Round(current.AccountBalance + transferAccount.Value, 2);
+            receiver.AccountBalance = (float)Math.Round(receiver.AccountBalance + transferAccount.Value, 2);
             _context.Entry(current).State = EntityState.Modified;
             _context.Entry(receiver).State = EntityState.Modified;
 

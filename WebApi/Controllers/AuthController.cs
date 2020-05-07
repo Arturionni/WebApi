@@ -15,10 +15,10 @@ namespace WebApi.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -29,10 +29,11 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> InsertUser([FromBody] RegisterViewModel model)
         {
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 Email = model.Email,
                 UserName = model.Email,
+                FirstName = model.FirstName,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -47,12 +48,9 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Login([FromBody] LoginViewModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
+            var user = await _userManager.FindByNameAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var claim = new[] {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
-                };
                 var signinKey = new SymmetricSecurityKey(
                   Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]));
 
@@ -69,7 +67,7 @@ namespace WebApi.Controllers
                   new
                   {
                       token = new JwtSecurityTokenHandler().WriteToken(token),
-                      expiration = token.ValidTo,
+                      userId = user.Id
                   });
             }
             return Unauthorized();

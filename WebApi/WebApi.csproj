@@ -23,9 +23,18 @@
     <Compile Remove="Migrations\20200507101648_first.Designer.cs" />
     <Compile Remove="Migrations\20200507101836_first.cs" />
     <Compile Remove="Migrations\20200507101836_first.Designer.cs" />
+    <Compile Remove="Migrations\20200507102026_add-migration first.cs" />
+    <Compile Remove="Migrations\20200507102026_add-migration first.Designer.cs" />
+    <Compile Remove="Migrations\20200507171201_first.cs" />
+    <Compile Remove="Migrations\20200507171201_first.Designer.cs" />
+    <Compile Remove="Migrations\20200507172025_add-migration first.cs" />
+    <Compile Remove="Migrations\20200507172025_add-migration first.Designer.cs" />
+    <Compile Remove="Migrations\20200507172412_first.cs" />
+    <Compile Remove="Migrations\20200507172412_first.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

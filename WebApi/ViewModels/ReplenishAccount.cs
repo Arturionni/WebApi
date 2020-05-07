@@ -8,8 +8,6 @@ namespace WebApi.ViewModels
 {
     public class ReplenishAccount
     {
-        public int Id { get; set; }
-
         [Required]
         public uint AccountNumber { get; set; }
         

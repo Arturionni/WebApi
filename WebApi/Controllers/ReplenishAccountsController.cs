@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace WebApi.Controllers
 
 
         // POST: api/ReplenishAccounts
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostReplenishAccount([FromBody] ReplenishAccount replenishAccount)
         {
@@ -32,7 +34,11 @@ namespace WebApi.Controllers
             }
 
             var account = _context.Accounts.Where(b => b.AccountNumber == replenishAccount.AccountNumber).FirstOrDefault();
-            account.AccountBalance += replenishAccount.Value;
+            if (account == null)
+            {
+                return NotFound();
+            }
+            account.AccountBalance = (float)Math.Round(account.AccountBalance + replenishAccount.Value);
             _context.Entry(account).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();

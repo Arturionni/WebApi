@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
 using WebApi.ViewModels;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
@@ -24,6 +24,7 @@ namespace WebApi.Controllers
         }
 
         // GET: api/AccountsModels
+        [Authorize]
         [HttpGet]
         public IEnumerable<AccountsModel> GetAccounts()
         {
@@ -31,6 +32,7 @@ namespace WebApi.Controllers
         }
 
         // GET: api/AccountsModels/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAccountsModel([FromRoute] string id)
         {
@@ -51,6 +53,7 @@ namespace WebApi.Controllers
 
 
         // POST: api/AccountsModels
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostAccountsModel([FromBody] AccountsModel accountsModel)
         {
@@ -71,6 +74,7 @@ namespace WebApi.Controllers
         }
 
         // DELETE: api/AccountsModels/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccountsModel([FromRoute] string id)
         {
@@ -84,8 +88,9 @@ namespace WebApi.Controllers
             {
                 return NotFound();
             }
+            accountsModel.Status = false;
+            _context.Entry(accountsModel).State = EntityState.Modified;
 
-            _context.Accounts.Remove(accountsModel);
             await _context.SaveChangesAsync();
 
             return Ok(accountsModel);

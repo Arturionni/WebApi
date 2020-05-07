@@ -87,7 +87,7 @@ namespace WebApi
             app.UseAuthentication();
             app.UseMvc();
 
-            DummyData.Initialize(app, userManager);
+            DummyData.InitializeAsync(app, userManager);
         }
     }
 }
