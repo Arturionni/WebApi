@@ -65,8 +65,10 @@ namespace WebApi.Controllers
             accountsModel.Status = true;
             accountsModel.AccountBalance = 0;
             Random rnd = new Random();
-            var rndNum = (ulong)rnd.Next(0, 999999999);
-            accountsModel.AccountNumber = 4000000000 + rndNum; 
+            var rndNum = (ulong)0;
+            do rndNum = 4000000000 + (ulong)rnd.Next(0, 999999999);
+                while (_context.Accounts.Any(u => u.AccountNumber == rndNum));
+            accountsModel.AccountNumber = rndNum; 
             _context.Accounts.Add(accountsModel);
             await _context.SaveChangesAsync();
 
