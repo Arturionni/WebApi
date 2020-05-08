@@ -43,6 +43,23 @@ namespace WebApi.Controllers
             _context.Entry(current).State = EntityState.Modified;
             _context.Entry(receiver).State = EntityState.Modified;
 
+            var time = DateTime.Now.ToString("yyyy-MM-dd, HH:mm:ss");
+            var history = new HistoryModel
+            {
+                AccountId = current.Id,
+                Date = time,
+                Type = "Перевод средств на счет "+receiver.AccountNumber.ToString(),
+                Value = transferAccount.Value
+            };
+            var history2 = new HistoryModel
+            {
+                AccountId = receiver.Id,
+                Date = time,
+                Type = "Зачисление со счета " + current.AccountNumber.ToString(),
+                Value = transferAccount.Value
+            };
+            _context.Entry(history).State = EntityState.Added;
+            _context.Entry(history2).State = EntityState.Added;
             await _context.SaveChangesAsync();
 
             return Ok(new { current, receiver });

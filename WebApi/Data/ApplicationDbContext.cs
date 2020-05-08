@@ -29,5 +29,6 @@ namespace WebApi.Data
             #endregion
         }
         public DbSet<AccountsModel> Accounts { get; set; }
+        public DbSet<HistoryModel> History { get; set; }
     }
 }

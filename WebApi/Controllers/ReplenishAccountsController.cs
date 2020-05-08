@@ -38,9 +38,17 @@ namespace WebApi.Controllers
             {
                 return NotFound();
             }
-            account.AccountBalance = (float)Math.Round(account.AccountBalance + replenishAccount.Value);
+            account.AccountBalance = (float)Math.Round(account.AccountBalance + replenishAccount.Value, 2);
             _context.Entry(account).State = EntityState.Modified;
 
+            var history = new HistoryModel
+            {
+                AccountId = account.Id,
+                Date = DateTime.Now.ToString("yyyy-MM-dd, HH:mm:ss"),
+                Type = "Пополнение",
+                Value = replenishAccount.Value
+            };
+            _context.Entry(history).State = EntityState.Added;
             await _context.SaveChangesAsync();
 
             return Ok(account);
