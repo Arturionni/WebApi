@@ -29,7 +29,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> InsertUser([FromBody] RegisterViewModel model)
         {
-            if (_userManager.FindByEmailAsync(model.Email) != null)
+            if (_userManager.Users.Where(e => e.Email == model.Email).FirstOrDefault() != null)
                 return BadRequest(new { Message = "Такой Email уже существует" });
             var user = new ApplicationUser
             {

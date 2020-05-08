@@ -11,7 +11,7 @@ namespace WebApi.Data
 {
     public class DummyData
     {
-        public static async Task InitializeAsync(IApplicationBuilder app, UserManager<ApplicationUser> userManager)
+        public static void InitializeAsync(IApplicationBuilder app, UserManager<ApplicationUser> userManager)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -36,15 +36,18 @@ namespace WebApi.Data
                         SecurityStamp = Guid.NewGuid().ToString(),
                         LockoutEnabled = true,
                     };
-                    var result = await userManager.CreateAsync(user, "123123");
-                    if (result.Succeeded)
+                    var password = new PasswordHasher<ApplicationUser>();
+                    var hashed = password.HashPassword(user, "123123");
+                    user.PasswordHash = hashed;
+                    var result = userManager.CreateAsync(user);
+                    if (result.IsCompletedSuccessfully)
                     {
-                        await userManager.AddToRoleAsync(user, "Admin");
+                        userManager.AddToRoleAsync(user, "Admin");
                     }
                 }
 
                 var accounts = GetAccounts().ToArray();
-                await context.Accounts.AddRangeAsync(accounts);
+                context.Accounts.AddRange(accounts);
 
 
                 context.SaveChanges();
