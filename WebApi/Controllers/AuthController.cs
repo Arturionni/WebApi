@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using WebApi.ViewModels;
 
 namespace WebApi.Controllers
@@ -74,6 +75,26 @@ namespace WebApi.Controllers
                   });
             }
             return Unauthorized();
+        }
+
+        [Route("changePassword")]
+        [HttpPost]
+        public async Task<ActionResult> changePassword([FromBody] ChangePasswordModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.OldPassword))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+                if (result != null)
+                    return Ok(
+                        new
+                        {
+                            Message = "Пароль успешно изменен"
+                        });
+                return BadRequest();
+            }
+            return BadRequest(new { Message = "Неверный пароль"});
         }
     }
 }
