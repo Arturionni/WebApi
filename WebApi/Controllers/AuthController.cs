@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -78,6 +79,7 @@ namespace WebApi.Controllers
         }
 
         [Route("changePassword")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> changePassword([FromBody] ChangePasswordModel model)
         {
@@ -95,6 +97,27 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             return BadRequest(new { Message = "Неверный пароль"});
+        }
+
+        [Route("updateUser")]
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> updateUser([FromBody] UpdateUserModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.OldEmail);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                user.Email = model.NewEmail;
+                user.FirstName = model.FirstName;
+
+                await _userManager.UpdateAsync(user);
+                return Ok(
+                    new
+                    {
+                        Message = "Данные пользователя успешно изменены"
+                    });
+            }
+            return BadRequest(new { Message = "Неверный пароль" });
         }
     }
 }

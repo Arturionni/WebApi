@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace WebApi.Controllers
 
 
         // GET: api/TemplatesModels/5
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetTemplatesModel([FromRoute] string id)
         {
@@ -42,6 +44,7 @@ namespace WebApi.Controllers
         }
 
         // PUT: api/TemplatesModels/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTemplatesModel([FromRoute] string id, [FromBody] TemplatesModel templatesModel)
         {
@@ -77,6 +80,7 @@ namespace WebApi.Controllers
         }
 
         // POST: api/TemplatesModels
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostTemplatesModel([FromBody] TemplatesModel templatesModel)
         {
@@ -96,6 +100,7 @@ namespace WebApi.Controllers
         }
 
         // DELETE: api/TemplatesModels/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTemplatesModel([FromRoute] string id)
         {
