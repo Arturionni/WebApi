@@ -30,5 +30,6 @@ namespace WebApi.Data
         }
         public DbSet<AccountsModel> Accounts { get; set; }
         public DbSet<HistoryModel> History { get; set; }
+        public DbSet<TemplatesModel> Templates { get; set; }
     }
 }

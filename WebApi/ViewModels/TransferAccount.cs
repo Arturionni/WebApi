@@ -9,9 +9,9 @@ namespace WebApi.ViewModels
     public class TransferAccount
     {
         [Required]
-        public uint AccountNumberReceiver { get; set; }
+        public ulong AccountNumberReceiver { get; set; }
         [Required]
-        public uint AccountNumberCurrent { get; set; }
+        public ulong AccountNumberCurrent { get; set; }
         [Required]
         public float Value { get; set; }
     }

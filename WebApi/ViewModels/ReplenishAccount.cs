@@ -9,7 +9,7 @@ namespace WebApi.ViewModels
     public class ReplenishAccount
     {
         [Required]
-        public uint AccountNumber { get; set; }
+        public ulong AccountNumber { get; set; }
         
         [Required]
         public float Value { get; set; }

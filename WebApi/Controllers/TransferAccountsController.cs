@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Data;
@@ -48,7 +46,7 @@ namespace WebApi.Controllers
             {
                 AccountId = current.Id,
                 Date = time,
-                Type = "Перевод средств на счет "+receiver.AccountNumber.ToString(),
+                Type = "Перевод средств на счет " + receiver.AccountNumber.ToString(),
                 Value = transferAccount.Value
             };
             var history2 = new HistoryModel
@@ -64,9 +62,5 @@ namespace WebApi.Controllers
 
             return Ok(new { current, receiver });
         }
-
-
-
-
     }
 }
