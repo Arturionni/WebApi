@@ -31,6 +31,7 @@ namespace WebApi.Controllers
             }
 
             var historyModel = _context.History.Where(a => a.AccountId == id);
+            
 
             if (historyModel == null)
             {

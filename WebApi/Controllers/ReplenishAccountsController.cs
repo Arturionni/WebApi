@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -44,14 +45,14 @@ namespace WebApi.Controllers
             var history = new HistoryModel
             {
                 AccountId = account.Id,
-                Date = DateTime.Now.ToString("yyyy-MM-dd, HH:mm:ss"),
+                Date = DateTime.Now.ToString("yyyy.MM.dd, HH:mm:ss"),
                 Type = "Пополнение",
                 Value = replenishAccount.Value
             };
             _context.Entry(history).State = EntityState.Added;
             await _context.SaveChangesAsync();
 
-            return Ok(account);
+            return Ok(new { id = account.Id, value = account.AccountBalance });
         }
     }
 }

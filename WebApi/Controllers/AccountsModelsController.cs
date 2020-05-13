@@ -34,14 +34,14 @@ namespace WebApi.Controllers
         // GET: api/AccountsModels/5
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAccountsModel([FromRoute] string id)
+        public IActionResult GetAccountsModel([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var accountsModel = await _context.Accounts.FindAsync(id);
+            var accountsModel = _context.Accounts.Where(b => b.UserId == id && b.Status == true).OrderBy(b => b.DateCreated);
 
             if (accountsModel == null)
             {
@@ -64,6 +64,7 @@ namespace WebApi.Controllers
             accountsModel.Id = Guid.NewGuid().ToString();
             accountsModel.Status = true;
             accountsModel.AccountBalance = 0;
+            accountsModel.DateCreated = DateTime.Now.ToString("dd.MM.yyyy, HH:mm:ss");
             Random rnd = new Random();
             var rndNum = (ulong)0;
             do rndNum = 4000000000 + (ulong)rnd.Next(0, 999999999);

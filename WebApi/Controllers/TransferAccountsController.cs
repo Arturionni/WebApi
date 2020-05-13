@@ -36,12 +36,12 @@ namespace WebApi.Controllers
             {
                 return NotFound();
             }
-            current.AccountBalance = (float)Math.Round(current.AccountBalance + transferAccount.Value, 2);
+            current.AccountBalance = (float)Math.Round(current.AccountBalance - transferAccount.Value, 2);
             receiver.AccountBalance = (float)Math.Round(receiver.AccountBalance + transferAccount.Value, 2);
             _context.Entry(current).State = EntityState.Modified;
             _context.Entry(receiver).State = EntityState.Modified;
 
-            var time = DateTime.Now.ToString("yyyy-MM-dd, HH:mm:ss");
+            var time = DateTime.Now.ToString("yyyy.MM.dd, HH:mm:ss");
             var history = new HistoryModel
             {
                 AccountId = current.Id,

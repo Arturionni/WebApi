@@ -37,9 +37,32 @@
     <Compile Remove="Migrations\20200508065712_first.Designer.cs" />
     <Compile Remove="Migrations\20200508070545_first.cs" />
     <Compile Remove="Migrations\20200508070545_first.Designer.cs" />
+    <Compile Remove="Migrations\20200510101924_first.cs" />
+    <Compile Remove="Migrations\20200510101924_first.Designer.cs" />
+    <Compile Remove="Migrations\20200510141653_two.cs" />
+    <Compile Remove="Migrations\20200510141653_two.Designer.cs" />
+    <Compile Remove="Migrations\20200511114656_third.cs" />
+    <Compile Remove="Migrations\20200511114656_third.Designer.cs" />
+    <Compile Remove="Migrations\20200512080420_first.cs" />
+    <Compile Remove="Migrations\20200512080420_first.Designer.cs" />
+    <Compile Remove="Migrations\20200512083056_first.cs" />
+    <Compile Remove="Migrations\20200512083056_first.Designer.cs" />
+    <Compile Remove="Migrations\20200512144454_first.cs" />
+    <Compile Remove="Migrations\20200512144454_first.Designer.cs" />
+    <Compile Remove="Migrations\20200512154126_two.cs" />
+    <Compile Remove="Migrations\20200512154126_two.Designer.cs" />
+    <Compile Remove="Migrations\20200512155348_third.cs" />
+    <Compile Remove="Migrations\20200512155348_third.Designer.cs" />
+    <Compile Remove="Migrations\20200512155704_firsst.cs" />
+    <Compile Remove="Migrations\20200512155704_firsst.Designer.cs" />
+    <Compile Remove="Migrations\20200512173457_sdds.cs" />
+    <Compile Remove="Migrations\20200512173457_sdds.Designer.cs" />
+    <Compile Remove="Migrations\20200512173635_first.cs" />
+    <Compile Remove="Migrations\20200512173635_first.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

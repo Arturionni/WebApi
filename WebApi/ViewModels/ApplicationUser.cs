@@ -13,6 +13,10 @@ namespace WebApi.ViewModels
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public bool isClient { get; set; }
+        public string fileName { get; set; }
+        public bool Status { get; set; }
+       
 
     }
 

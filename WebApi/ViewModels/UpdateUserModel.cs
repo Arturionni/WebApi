@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,5 +21,9 @@ namespace WebApi.ViewModels
 
         [Required]
         public string FirstName { get; set; }
+
+        public IFormFile ProfileImage { get; set; }
+        public string fileName { get; set; }
+
     }
 }

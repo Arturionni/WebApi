@@ -11,6 +11,7 @@ namespace WebApi.ViewModels
         public string Id { get; set; }
         public ulong AccountNumber { get; set; }
         public float AccountBalance { get; set; }
+        public string DateCreated { get; set; }
         public string UserId { get; set; }
         public bool Status { get; set; }
 

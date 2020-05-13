@@ -35,6 +35,7 @@ namespace WebApi.Data
                         PhoneNumberConfirmed = true,
                         SecurityStamp = Guid.NewGuid().ToString(),
                         LockoutEnabled = true,
+                        isClient = true
                     };
                     var password = new PasswordHasher<ApplicationUser>();
                     var hashed = password.HashPassword(user, "123123");

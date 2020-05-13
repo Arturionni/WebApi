@@ -33,7 +33,7 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var templatesModel = _context.Templates.Where(b => b.AccountNumber == Convert.ToUInt64(id)).FirstOrDefault();
+            var templatesModel = _context.Templates.Where(b => b.AccountNumberCurrent == Convert.ToUInt64(id)).FirstOrDefault();
 
             if (templatesModel == null)
             {
@@ -88,7 +88,7 @@ namespace WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (!_context.Templates.Any(u => u.AccountNumber == templatesModel.AccountNumber))
+            if (!_context.Templates.Any(u => u.AccountNumberCurrent == templatesModel.AccountNumberCurrent))
                 _context.Templates.Add(templatesModel);
             else
             {
