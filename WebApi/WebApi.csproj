@@ -69,6 +69,8 @@
     <Compile Remove="Migrations\20200520154701_first.Designer.cs" />
     <Compile Remove="Migrations\20200520154918_fd.cs" />
     <Compile Remove="Migrations\20200520154918_fd.Designer.cs" />
+    <Compile Remove="Migrations\20200521085317_add-migraton ffd.cs" />
+    <Compile Remove="Migrations\20200521085317_add-migraton ffd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

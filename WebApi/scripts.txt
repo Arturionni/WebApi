@@ -1,0 +1,276 @@
+CREATE TABLE public."Accounts"
+(
+    "Id" uuid NOT NULL,
+    "AccountNumber" text COLLATE pg_catalog."default",
+    "AccountBalance" numeric NOT NULL,
+    "DateCreated" text COLLATE pg_catalog."default",
+    "UserId" uuid NOT NULL,
+    "Status" boolean NOT NULL,
+    CONSTRAINT "PK_Accounts" PRIMARY KEY ("Id")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."Accounts"
+    OWNER to admin;
+
+CREATE TABLE public."AspNetRoles"
+(
+    "Id" text COLLATE pg_catalog."default" NOT NULL,
+    "Name" character varying(256) COLLATE pg_catalog."default",
+    "NormalizedName" character varying(256) COLLATE pg_catalog."default",
+    "ConcurrencyStamp" text COLLATE pg_catalog."default",
+    CONSTRAINT "PK_AspNetRoles" PRIMARY KEY ("Id")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetRoles"
+    OWNER to admin;
+-- Index: RoleNameIndex
+
+-- DROP INDEX public."RoleNameIndex";
+
+CREATE UNIQUE INDEX "RoleNameIndex"
+    ON public."AspNetRoles" USING btree
+    ("NormalizedName" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Table: public."AspNetUsers"
+
+-- DROP TABLE public."AspNetUsers";
+
+CREATE TABLE public."AspNetUsers"
+(
+    "Id" text COLLATE pg_catalog."default" NOT NULL,
+    "UserName" character varying(256) COLLATE pg_catalog."default",
+    "NormalizedUserName" character varying(256) COLLATE pg_catalog."default",
+    "Email" character varying(256) COLLATE pg_catalog."default",
+    "NormalizedEmail" character varying(256) COLLATE pg_catalog."default",
+    "EmailConfirmed" boolean NOT NULL,
+    "PasswordHash" text COLLATE pg_catalog."default",
+    "SecurityStamp" text COLLATE pg_catalog."default",
+    "ConcurrencyStamp" text COLLATE pg_catalog."default",
+    "PhoneNumber" text COLLATE pg_catalog."default",
+    "PhoneNumberConfirmed" boolean NOT NULL,
+    "TwoFactorEnabled" boolean NOT NULL,
+    "LockoutEnd" timestamp with time zone,
+    "LockoutEnabled" boolean NOT NULL,
+    "AccessFailedCount" integer NOT NULL,
+    "FirstName" text COLLATE pg_catalog."default",
+    "LastName" text COLLATE pg_catalog."default",
+    "isClient" boolean NOT NULL,
+    "fileName" text COLLATE pg_catalog."default",
+    "Status" boolean NOT NULL,
+    CONSTRAINT "PK_AspNetUsers" PRIMARY KEY ("Id")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetUsers"
+    OWNER to admin;
+-- Index: EmailIndex
+
+-- DROP INDEX public."EmailIndex";
+
+CREATE INDEX "EmailIndex"
+    ON public."AspNetUsers" USING btree
+    ("NormalizedEmail" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: UserNameIndex
+
+-- DROP INDEX public."UserNameIndex";
+
+CREATE UNIQUE INDEX "UserNameIndex"
+    ON public."AspNetUsers" USING btree
+    ("NormalizedUserName" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Table: public."History"
+
+-- DROP TABLE public."History";
+
+CREATE TABLE public."History"
+(
+    "Id" uuid NOT NULL,
+    "AccountId" uuid NOT NULL,
+    "Type" text COLLATE pg_catalog."default",
+    "Date" text COLLATE pg_catalog."default",
+    "Value" numeric NOT NULL,
+    CONSTRAINT "PK_History" PRIMARY KEY ("Id")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."History"
+    OWNER to admin;
+
+-- Table: public."Templates"
+
+-- DROP TABLE public."Templates";
+
+CREATE TABLE public."Templates"
+(
+    "Id" uuid NOT NULL,
+    "AccountNumberCurrent" text COLLATE pg_catalog."default" NOT NULL,
+    "AccountNumberReceiver" text COLLATE pg_catalog."default" NOT NULL,
+    "PaymentName" text COLLATE pg_catalog."default",
+    "ReceiverName" text COLLATE pg_catalog."default",
+    "ReceiverEmail" text COLLATE pg_catalog."default",
+    "PaymentPurpose" text COLLATE pg_catalog."default",
+    "PaymentValue" numeric NOT NULL,
+    CONSTRAINT "PK_Templates" PRIMARY KEY ("Id")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."Templates"
+    OWNER to admin;
+-- Table: public."AspNetRoleClaims"
+
+-- DROP TABLE public."AspNetRoleClaims";
+
+CREATE TABLE public."AspNetRoleClaims"
+(
+    "Id" integer NOT NULL,
+    "RoleId" text COLLATE pg_catalog."default" NOT NULL,
+    "ClaimType" text COLLATE pg_catalog."default",
+    "ClaimValue" text COLLATE pg_catalog."default",
+    CONSTRAINT "PK_AspNetRoleClaims" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId")
+        REFERENCES public."AspNetRoles" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetRoleClaims"
+    OWNER to admin;
+-- Index: IX_AspNetRoleClaims_RoleId
+
+-- DROP INDEX public."IX_AspNetRoleClaims_RoleId";
+
+CREATE INDEX "IX_AspNetRoleClaims_RoleId"
+    ON public."AspNetRoleClaims" USING btree
+    ("RoleId" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Table: public."AspNetUserClaims"
+
+-- DROP TABLE public."AspNetUserClaims";
+
+CREATE TABLE public."AspNetUserClaims"
+(
+    "Id" integer NOT NULL,
+    "UserId" text COLLATE pg_catalog."default" NOT NULL,
+    "ClaimType" text COLLATE pg_catalog."default",
+    "ClaimValue" text COLLATE pg_catalog."default",
+    CONSTRAINT "PK_AspNetUserClaims" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_AspNetUserClaims_AspNetUsers_UserId" FOREIGN KEY ("UserId")
+        REFERENCES public."AspNetUsers" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetUserClaims"
+    OWNER to admin;
+-- Index: IX_AspNetUserClaims_UserId
+
+-- DROP INDEX public."IX_AspNetUserClaims_UserId";
+
+CREATE INDEX "IX_AspNetUserClaims_UserId"
+    ON public."AspNetUserClaims" USING btree
+    ("UserId" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Table: public."AspNetUserLogins"
+
+-- DROP TABLE public."AspNetUserLogins";
+
+CREATE TABLE public."AspNetUserLogins"
+(
+    "LoginProvider" text COLLATE pg_catalog."default" NOT NULL,
+    "ProviderKey" text COLLATE pg_catalog."default" NOT NULL,
+    "ProviderDisplayName" text COLLATE pg_catalog."default",
+    "UserId" text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK_AspNetUserLogins" PRIMARY KEY ("LoginProvider", "ProviderKey"),
+    CONSTRAINT "FK_AspNetUserLogins_AspNetUsers_UserId" FOREIGN KEY ("UserId")
+        REFERENCES public."AspNetUsers" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetUserLogins"
+    OWNER to admin;
+-- Index: IX_AspNetUserLogins_UserId
+
+-- DROP INDEX public."IX_AspNetUserLogins_UserId";
+
+CREATE INDEX "IX_AspNetUserLogins_UserId"
+    ON public."AspNetUserLogins" USING btree
+    ("UserId" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Table: public."AspNetUserRoles"
+
+-- DROP TABLE public."AspNetUserRoles";
+
+CREATE TABLE public."AspNetUserRoles"
+(
+    "UserId" text COLLATE pg_catalog."default" NOT NULL,
+    "RoleId" text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK_AspNetUserRoles" PRIMARY KEY ("UserId", "RoleId"),
+    CONSTRAINT "FK_AspNetUserRoles_AspNetRoles_RoleId" FOREIGN KEY ("RoleId")
+        REFERENCES public."AspNetRoles" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT "FK_AspNetUserRoles_AspNetUsers_UserId" FOREIGN KEY ("UserId")
+        REFERENCES public."AspNetUsers" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetUserRoles"
+    OWNER to admin;
+-- Index: IX_AspNetUserRoles_RoleId
+
+-- DROP INDEX public."IX_AspNetUserRoles_RoleId";
+
+CREATE INDEX "IX_AspNetUserRoles_RoleId"
+    ON public."AspNetUserRoles" USING btree
+    ("RoleId" COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Table: public."AspNetUserTokens"
+
+-- DROP TABLE public."AspNetUserTokens";
+
+CREATE TABLE public."AspNetUserTokens"
+(
+    "UserId" text COLLATE pg_catalog."default" NOT NULL,
+    "LoginProvider" text COLLATE pg_catalog."default" NOT NULL,
+    "Name" text COLLATE pg_catalog."default" NOT NULL,
+    "Value" text COLLATE pg_catalog."default",
+    CONSTRAINT "PK_AspNetUserTokens" PRIMARY KEY ("UserId", "LoginProvider", "Name"),
+    CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId")
+        REFERENCES public."AspNetUsers" ("Id") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."AspNetUserTokens"
+    OWNER to admin;
+CREATE TABLE public."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."__EFMigrationsHistory"
+    OWNER to admin;
