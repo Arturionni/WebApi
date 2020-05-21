@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApi.Data;
+using WebApi.BusinessLogic;
+using WebApi.Services;
 using WebApi.ViewModels;
 
 namespace WebApi.Controllers
@@ -15,115 +11,35 @@ namespace WebApi.Controllers
     [ApiController]
     public class TemplatesModelsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TransactionsRequestHundler _transactionsRequestHundler;
 
-        public TemplatesModelsController(ApplicationDbContext context)
+        public TemplatesModelsController(TransactionsRequestHundler transactionsRequestHundler)
         {
-            _context = context;
+            _transactionsRequestHundler = transactionsRequestHundler;
         }
-
-
         // GET: api/TemplatesModels/5
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetTemplatesModel([FromRoute] string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var templatesModel = _context.Templates.Where(b => b.AccountNumberCurrent == Convert.ToUInt64(id)).FirstOrDefault();
-
-            if (templatesModel == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(templatesModel);
+            return _transactionsRequestHundler.GetTemplate(id);
         }
 
         // PUT: api/TemplatesModels/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTemplatesModel([FromRoute] string id, [FromBody] TemplatesModel templatesModel)
+        public IActionResult PutTemplatesModel([FromRoute] Guid id, [FromBody] TemplatesModel templatesModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != templatesModel.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(templatesModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TemplatesModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return _transactionsRequestHundler.UpdateTemplate(templatesModel);
         }
 
         // POST: api/TemplatesModels
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> PostTemplatesModel([FromBody] TemplatesModel templatesModel)
+        public IActionResult PostTemplatesModel([FromBody] TemplatesModel templatesModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            if (!_context.Templates.Any(u => u.AccountNumberCurrent == templatesModel.AccountNumberCurrent))
-                _context.Templates.Add(templatesModel);
-            else
-            {
-                return BadRequest(new { Message = "Шаблон уже существует"});
-            }
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTemplatesModel", new { id = templatesModel.Id }, templatesModel);
+            return _transactionsRequestHundler.CreateTemplate(templatesModel);
         }
 
-        // DELETE: api/TemplatesModels/5
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTemplatesModel([FromRoute] string id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var templatesModel = await _context.Templates.FindAsync(id);
-            if (templatesModel == null)
-            {
-                return NotFound();
-            }
-
-            _context.Templates.Remove(templatesModel);
-            await _context.SaveChangesAsync();
-
-            return Ok(templatesModel);
-        }
-
-        private bool TemplatesModelExists(string id)
-        {
-            return _context.Templates.Any(e => e.Id == id);
-        }
     }
 }

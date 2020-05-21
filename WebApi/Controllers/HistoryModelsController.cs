@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApi.Data;
-using WebApi.ViewModels;
+using WebApi.BusinessLogic;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -14,31 +9,18 @@ namespace WebApi.Controllers
     [ApiController]
     public class HistoryModelsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TransactionsRequestHundler _transactionsRequestHundler;
 
-        public HistoryModelsController(ApplicationDbContext context)
+        public HistoryModelsController(TransactionsRequestHundler transactionsRequestHundler)
         {
-            _context = context;
+            _transactionsRequestHundler = transactionsRequestHundler;
         }
 
         // GET: api/HistoryModels/5
         [HttpGet("{id}")]
-        public IActionResult GetHistoryModel([FromRoute] string id)
+        public IActionResult GetHistoryModel([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var historyModel = _context.History.Where(a => a.AccountId == id);
-            
-
-            if (historyModel == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(historyModel);
+            return _transactionsRequestHundler.GetHistory(id);
         }
 
     }

@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApi.BusinessLogic;
 using WebApi.Data;
+using WebApi.Services;
 using WebApi.ViewModels;
 
 namespace WebApi.Controllers
@@ -16,43 +18,19 @@ namespace WebApi.Controllers
     [ApiController]
     public class ReplenishAccountsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly TransactionsRequestHundler _transactionsRequestHundler;
 
-        public ReplenishAccountsController(ApplicationDbContext context)
+        public ReplenishAccountsController(TransactionsRequestHundler transactionsRequestHundler)
         {
-            _context = context;
+            _transactionsRequestHundler = transactionsRequestHundler;
         }
-
 
         // POST: api/ReplenishAccounts
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> PostReplenishAccount([FromBody] ReplenishAccount replenishAccount)
+        public IActionResult PostReplenishAccount([FromBody] ReplenishAccount replenishAccount)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var account = _context.Accounts.Where(b => b.AccountNumber == replenishAccount.AccountNumber).FirstOrDefault();
-            if (account == null)
-            {
-                return NotFound();
-            }
-            account.AccountBalance = (float)Math.Round(account.AccountBalance + replenishAccount.Value, 2);
-            _context.Entry(account).State = EntityState.Modified;
-
-            var history = new HistoryModel
-            {
-                AccountId = account.Id,
-                Date = DateTime.Now.ToString("yyyy.MM.dd, HH:mm:ss"),
-                Type = "Пополнение",
-                Value = replenishAccount.Value
-            };
-            _context.Entry(history).State = EntityState.Added;
-            await _context.SaveChangesAsync();
-
-            return Ok(new { id = account.Id, value = account.AccountBalance });
+            return _transactionsRequestHundler.MakeReplenish(replenishAccount);
         }
     }
 }

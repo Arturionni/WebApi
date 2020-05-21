@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace WebApi.ViewModels
 {
-    public class TemplatesModel
+    public class PaymentAccount
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
-        public ulong AccountNumberCurrent { get; set; }
+        public string AccountNumberReceiver { get; set; }
         [Required]
-        public ulong AccountNumberReceiver { get; set; }
+        public string AccountNumberCurrent { get; set; }
+        [Required]
+        public decimal Value { get; set; }
+        [Required]
+        public bool UseTemplate { get; set; }
         public string PaymentName { get; set; }
         public string ReceiverName { get; set; }
         public string ReceiverEmail { get; set; }
         public string PaymentPurpose { get; set; }
-        [Required]
-        public float PaymentValue { get; set; }
+
     }
 }

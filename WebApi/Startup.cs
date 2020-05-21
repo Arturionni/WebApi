@@ -15,7 +15,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using WebApi.BusinessLogic;
 using WebApi.Data;
+using WebApi.Services;
+using WebApi.Services.Interfaces;
 using WebApi.ViewModels;
 
 namespace WebApi
@@ -32,9 +35,15 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connString = Configuration.GetConnectionString("MyWebApiConnection");
             services.AddDbContext<ApplicationDbContext>(
-                option => option.UseNpgsql(Configuration.GetConnectionString("MyWebApiConnection")));
+                option => option.UseNpgsql(connString));
+            services.AddScoped<AccountsRequestHundler>();
+            services.AddScoped<AuthRequestHundler>();
+            services.AddScoped<TransactionsRequestHundler>();
+            services.AddScoped<IOperationsService, OperationsService>();
 
+            services.AddTransient(provider => new OperationsService(connString));
             services.AddIdentity<ApplicationUser, IdentityRole>(
                     option =>
                     {
@@ -70,7 +79,7 @@ namespace WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -86,8 +95,6 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseMvc();
-
-            //DummyData.InitializeAsync(app, userManager);
         }
     }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace WebApi.ViewModels
 {
-    public class TransferAccount
+    public class ReplenishAccount
     {
         [Required]
-        public ulong AccountNumberReceiver { get; set; }
+        public string AccountNumber { get; set; }
+        
         [Required]
-        public ulong AccountNumberCurrent { get; set; }
-        [Required]
-        public float Value { get; set; }
+        public decimal Value { get; set; }
+
     }
 }
